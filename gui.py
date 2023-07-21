@@ -36,6 +36,19 @@ def show_selected():
     else:
         messagebox.showwarning("Error", "Please select an option.")
 
+def show_error_message(title, message):
+    error_dialog = tk.Toplevel(root)
+    error_dialog.title(title)
+    error_dialog.config(bg='white')
+
+    error_label = tk.Label(error_dialog, text=message, bg='white', font=("Helvetica", 16), wraplength=500)
+    error_label.pack(pady=20)
+
+    ok_button = tk.Button(error_dialog, text="OK", command=error_dialog.destroy, font=("Helvetica", 14))
+    ok_button.pack(pady=10)
+
+    center_window(error_dialog, 600, 300)  # Adjust the dialog size as needed
+
 def page_of_ncbi():
     new_window = tk.Toplevel(root)
     new_window.title("Get Data from NCBI")
@@ -55,19 +68,6 @@ def page_of_sq_al():
     new_window.attributes("-zoomed", True)
 
 ##### MSA
-
-def show_error_message(title, message):
-    error_dialog = tk.Toplevel(root)
-    error_dialog.title(title)
-    error_dialog.config(bg='white')
-
-    error_label = tk.Label(error_dialog, text=message, bg='white', font=("Helvetica", 16), wraplength=500)
-    error_label.pack(pady=20)
-
-    ok_button = tk.Button(error_dialog, text="OK", command=error_dialog.destroy, font=("Helvetica", 14))
-    ok_button.pack(pady=10)
-
-    center_window(error_dialog, 600, 300)  # Adjust the dialog size as needed
 
 def page_of_msa():
     global msa_output_file_name, msa_sequence, msa_filePath
