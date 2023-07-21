@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
+import subprocess
 
 ## GLOBAL VARIABLES
 
@@ -36,7 +37,7 @@ def show_selected():
     else:
         messagebox.showwarning("Error", "Please select an option.")
 
-def show_error_message(title, message):
+def show_message(title, message):
     error_dialog = tk.Toplevel(root)
     error_dialog.title(title)
     error_dialog.config(bg='white')
@@ -81,7 +82,7 @@ def page_of_msa():
             msa_filePath = filedialog.askopenfilename(filetypes=[("All Files", "*.*")])
             msa_sequence = None  # Reset msa_sequence when choosing a file
         else:
-            show_error_message("MSA Algorithm is Not Chosen", "Please choose an MSA algorithm before selecting a file.")
+            show_message("MSA Algorithm is Not Chosen", "Please choose an MSA algorithm before selecting a file.")
 
     def paste_sequence():
         global msa_sequence, msa_filePath
@@ -95,7 +96,7 @@ def page_of_msa():
                     msa_filePath = None  # Reset msa_filePath when pasting a sequence
                     sequence_dialog.destroy()
                 else:
-                    show_error_message("Empty Sequence", "Please enter a sequence!")
+                    show_message("Empty Sequence", "Please enter a sequence!")
 
             sequence_dialog = tk.Toplevel(new_window)
             sequence_dialog.title("Paste a Sequence")
@@ -112,7 +113,7 @@ def page_of_msa():
 
             center_window(sequence_dialog, 600, 400)
         else:
-            show_error_message("MSA Algorithm is Not Chosen", "Please choose an MSA algorithm before pasting a sequence.")
+            show_message("MSA Algorithm is Not Chosen", "Please choose an MSA algorithm before pasting a sequence.")
 
     def exit_page():
         new_window.destroy()
@@ -121,11 +122,33 @@ def page_of_msa():
         global msa_output_file_name  # Use the global variable for output_text
         output_file_name = msa_output_file_name.get()
         if output_file_name.strip():
-            output_file_name = output_file_name+".txt"
+            output_file_name = output_file_name
             msa_algorithm = var_msa.get()
-            print(f'Running {msa_algorithm} on {msa_filePath} or {msa_sequence} saving it in {output_file_name}')
+            print(f'Running {msa_algorithm} algorithm, on {msa_filePath} or {msa_sequence}, saving it in {output_file_name}')
+            # Prepare the MSA command based on the chosen options
+            if msa_filePath:
+                if msa_algorithm == "clustal":
+                    msa_command = f"./MSA.sh -msaTool clo -outName {output_file_name} -seqPath {msa_filePath}"
+                else:
+                    msa_command = f"./MSA.sh -msaTool mft -outName {output_file_name} -seqPath {msa_filePath}"
+            else:
+                if msa_algorithm == "clustal":
+                    msa_command = f"./MSA.sh -msaTool clo -outName {output_file_name} -seqPaste <<EOF\n{msa_sequence}\nEOF"
+                else:
+                    msa_command = f"./MSA.sh -msaTool mft -outName {output_file_name} -seqPaste <<EOF\n{msa_sequence}\nEOF"
+
+            # Run the MSA script using subprocess
+            try:
+                subprocess.run(msa_command, shell=True, check=True)
+            except subprocess.CalledProcessError:
+                show_message("MSA Execution Error", "An error occurred while running the MSA script.")
+                return
+
+            # Optionally, display a success message
+            show_message("MSA Completed", msa_command)
+
         else:
-            show_error_message("Output File Name Missing", "Please enter a valid output file name.")
+            show_message("Output File Name Missing", "Please enter a valid output file name.")
         
     def check_msa_option():
         msa_algorithm = var_msa.get()
