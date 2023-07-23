@@ -87,69 +87,6 @@ def page_of_sq_al():
 
 
     def Global_Parwise():
-        pass
-    #     new_window = tk.Toplevel(root)
-    #     new_window.title(" Global Parwise Sequence Alignment")
-    #     new_window.config(bg='white')
-    #     button1_frame = tk.Frame(new_window, bg='white', width=300, height=150, bd=2)
-    #     button1_frame.pack()
-    #
-    #     new_label = tk.Label(button1_frame,
-    #                          text="Upload Query Sequence",
-    #                          bg='white', font=("Helvetica", 16))
-    #     new_label.pack(pady=10)
-    #
-    #     choose_file_button = tk.Button(button1_frame, text="Choose a File",
-    #                                    command=saQu_filePath,
-    #                                    font=("Helvetica", 16))
-    #     choose_file_button.pack(side=tk.LEFT, padx=20, pady=20)
-    #     button2_frame = tk.Frame(new_window, bg='white', width=300, height=150, bd=2)
-    #     button2_frame.pack()
-    #     new_label = tk.Label(button2_frame,
-    #                          text="Upload Referance Sequence",
-    #                          bg='white', font=("Helvetica", 16))
-    #     new_label.pack(pady=20)
-    #
-    #     choose_file_button = tk.Button(button2_frame, text="Choose a File",
-    #                                    command=open_Refrance_explore,
-    #                                    font=("Helvetica", 16))
-    #     choose_file_button.pack(side=tk.LEFT, padx=40, pady=20)
-
-
-
-        # global msa_output_file_name  # Use the global variable for output_text
-        # output_file_name = msa_output_file_name.get()
-        # if output_file_name.strip():
-        #     output_file_name = output_file_name
-        #     msa_algorithm = var_msa.get()
-        #     print(
-        #         f'Running {msa_algorithm} algorithm, on {msa_filePath} or {msa_sequence}, saving it in {output_file_name}')
-        #     # Prepare the MSA command based on the chosen options
-        #     if msa_filePath:
-        #         if msa_algorithm == "clustal":
-        #             msa_command = f"./MSA.sh -msaTool clo -outName {output_file_name} -seqPath {msa_filePath}"
-        #         else:
-        #             msa_command = f"./MSA.sh -msaTool mft -outName {output_file_name} -seqPath {msa_filePath}"
-        #     else:
-        #         if msa_algorithm == "clustal":
-        #             msa_command = f"./MSA.sh -msaTool clo -outName {output_file_name} -seqPaste <<EOF\n{msa_sequence}\nEOF"
-        #         else:
-        #             msa_command = f"./MSA.sh -msaTool mft -outName {output_file_name} -seqPaste <<EOF\n{msa_sequence}\nEOF"
-        #
-        #     # Run the MSA script using subprocess
-        #     try:
-        #         subprocess.run(msa_command, shell=True, check=True)
-        #     except subprocess.CalledProcessError:
-        #         show_message("MSA Execution Error", "An error occurred while running the MSA script.")
-        #         return
-
-            # Optionally, display a success message
-        #     show_message("MSA Completed", msa_command)
-        #
-        # else:
-        #     show_message("Output File Name Missing", "Please enter a valid output file name.")
-
-    def local_Parwise():
         new_window = tk.Toplevel(root)
 
         new_window.title(" Local Parwise Sequence Alignment")
@@ -182,9 +119,92 @@ def page_of_sq_al():
         button3_frame.pack(pady=20)
 
 
-        # def retrieve_input():
-        #     inputValue = textBox.get("1.0", "end-1c")
-        #     print(inputValue)
+        def run_GlobalSA():
+            global sa_output_file_name
+            sa_output_file_name = textBox.get("1.0", "end-1c")
+            sa_command=None
+
+            if saQu_filePath:  # Check if the value is not empty or contains only spaces
+                if saRef_filePath:
+                    if sa_output_file_name.strip():
+                        print(
+                            f'Running Global Parwise sequence Alignment , using Refseq {saRef_filePath} and query sequence {saQu_filePath} , saving it in {sa_output_file_name}')
+                        sa_command = f"./global.sh -s {saQu_filePath} -q {saRef_filePath} -o {sa_output_file_name} "
+
+
+
+
+                    else:
+                        show_message("Output File Name Missing", "Please enter a valid output file name.")
+                else:
+                    show_message("Chossing Referance Sequence Missing", "Please Choose Valid Refrance Sequence.")
+
+
+
+
+
+            else:
+                show_message("Chossing Query Sequence Missing", "Please Choose Valid Query Sequence.")
+            try:
+                subprocess.run(sa_command, shell=True, check=True)
+            except subprocess.CalledProcessError:
+                show_message("SA Execution Error", "An error occurred while running the SA script.")
+                return
+
+        new_label = tk.Label(button3_frame,
+                             text="Output File Name:",
+                             bg='white', font=("Helvetica", 16))
+        new_label.pack(pady=20)
+        textBox = tk.Text(button3_frame, width=25, height=1)
+        textBox.pack(pady=20)
+        buttonCommit = tk.Button(button3_frame, text="Run Algorithm",
+                                 font=("Helvetica", 16), command=lambda: run_GlobalSA())
+        # command=lambda: retrieve_input() >>> just means do this when i press the button
+        buttonCommit.pack(pady=20)
+
+        def exit_page():
+            new_window.destroy()
+            button1_frame.destroy()
+
+        exit_button = tk.Button(new_window, text="Exit", command=exit_page, font=("Helvetica", 16))
+        exit_button.pack(pady=10)
+
+        center_window(new_window, 600, 500)
+        new_window.attributes("-zoomed", True)
+
+    def local_Parwise():
+        new_window = tk.Toplevel(root)
+
+        new_window.title(" Global Parwise Sequence Alignment")
+        new_window.config(bg='white')
+
+        button1_frame = tk.Frame(new_window, bg='white', width=300, height=150, bd=2)
+        button1_frame.pack()
+
+        new_label = tk.Label(button1_frame,
+                             text="Upload Query Sequence",
+                             bg='white', font=("Helvetica", 16))
+        new_label.pack(pady=10)
+
+        choose_file_button = tk.Button(button1_frame, text="Choose a File",
+                                       command=open_Query_explore,
+                                       font=("Helvetica", 16))
+        choose_file_button.pack(side=tk.LEFT, padx=20, pady=20)
+        button2_frame = tk.Frame(new_window, bg='white', width=300, height=150, bd=2)
+        button2_frame.pack()
+        new_label = tk.Label(button2_frame,
+                             text="Upload Referance Sequence",
+                             bg='white', font=("Helvetica", 16))
+        new_label.pack(pady=20)
+
+        choose_file_button = tk.Button(button2_frame, text="Choose a File",
+                                       command=open_Refrance_explore,
+                                       font=("Helvetica", 16))
+        choose_file_button.pack(side=tk.LEFT, padx=40, pady=20)
+        button3_frame = tk.Frame(new_window, bg='white', width=300, height=150, bd=2)
+        button3_frame.pack(pady=20)
+
+
         def run_LocalSA():
             global sa_output_file_name
             sa_output_file_name = textBox.get("1.0", "end-1c")
@@ -192,7 +212,7 @@ def page_of_sq_al():
 
 
 
-            if saQu_filePath :  # Check if the value is not empty or contains only spaces
+            if saQu_filePath :
                 if saRef_filePath:
                     if sa_output_file_name.strip():
                         print(f'Running Local Parwise sequence Alignment , using Refseq {saRef_filePath} and query sequence {saQu_filePath} , saving it in {sa_output_file_name}')
@@ -232,10 +252,7 @@ def page_of_sq_al():
         def exit_page():
             new_window.destroy()
             button1_frame.destroy()
-            button2_frame.destory()
-            button3_frame.destroy()
-        # run_button = tk.Button(button3_frame, text="Run Algorithm", command=run_LocalSA, font=("Helvetica", 16))
-        # run_button.pack(pady=10)
+            
         exit_button = tk.Button(new_window, text="Exit", command=exit_page, font=("Helvetica", 16))
         exit_button.pack(pady=10)
 
