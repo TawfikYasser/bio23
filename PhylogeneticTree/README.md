@@ -1,3 +1,9 @@
+##  Required Software Installations:<br>
+tkinter: pip install tk <br>
+muscle: sudo apt install muscle <br> 
+phyml: sudo apt-get update <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sudo apt-get install phyml <br>
+
+any extra packages or error messages appearing with COMMAND NOT FOUND, the cmd will suggest you the required command to install the missing or you can just google it :D
 ## To run the GUI, you shall go through the following steps:<br>
 
 1- upload the PhylogeneticTree folder to your local machine<br>
