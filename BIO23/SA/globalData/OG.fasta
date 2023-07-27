@@ -1,0 +1,38 @@
+########################################
+# Program: needle
+# Rundate: Mon 24 Jul 2023 23:34:15
+# Commandline: needle
+#    -asequence /home/tawfik/SSDData/NU/Research/Courses/BIO/BIOPROJECT/BIO23/SA/globalData/sequence1.fasta
+#    -bsequence /home/tawfik/SSDData/NU/Research/Courses/BIO/BIOPROJECT/BIO23/SA/globalData/sequence2.fasta
+#    -gapopen 10
+#    -gapextend 0.5
+#    -outfile /home/tawfik/SSDData/NU/Research/Courses/BIO/BIOPROJECT/BIO23/SA/globalData/OG.fasta
+# Align_format: srspair
+# Report_file: /home/tawfik/SSDData/NU/Research/Courses/BIO/BIOPROJECT/BIO23/SA/globalData/OG.fasta
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: Sequence1
+# 2: Sequence2
+# Matrix: EDNAFULL
+# Gap_penalty: 10.0
+# Extend_penalty: 0.5
+#
+# Length: 12
+# Identity:      10/12 (83.3%)
+# Similarity:    10/12 (83.3%)
+# Gaps:           0/12 ( 0.0%)
+# Score: 42.0
+# 
+#
+#=======================================
+
+Sequence1          1 ATCGATCGATCG     12
+                     ||||||.|.|||
+Sequence2          1 ATCGATAGCTCG     12
+
+
+#---------------------------------------
+#---------------------------------------
